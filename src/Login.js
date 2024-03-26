@@ -1,13 +1,27 @@
 import { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-export default function Login() {
+export default function Login({setlogado}) {
     
-    const[login, setLogin] = useState(true)
+    const[email, setEmail] = useState("");
+    const[senha, setSenha] = useState("");
+    const[erro, setErro] = useState( false );
+
+    const[login, setLogin] = useState(false)
 
     function Trocar() {
         setLogin(!login)
+    }
+
+    async function realizaLogin() {
+        if(email == 'tomas@mail.com' && senha == '123') {
+            await AsyncStorage.setItem('usuario', email);
+            setlogado(true);
+        } else {
+            setErro(true);
+        }
+
     }
     
     return(
@@ -24,14 +38,20 @@ export default function Login() {
                         style={css.input} 
                         placeholder='Insira o e-mail'
                         keyboardType='default'
+                        value={email}
+                        TextInput={email}
+                        onChangeText={(digitado) => setEmail(digitado)}
                         />
                         <TextInput style={css.input} 
                         placeholder='Insira a senha'
                         keyboardType='default'
+                        value={senha}
+                        TextInput={senha}
+                        onChangeText={(digitado) => setSenha(digitado)}
                         />
                     </View>
                     <Text style={css.helper} onPress={Trocar}>Não é cadastrado?</Text>
-                    <TouchableOpacity style={css.btn}>
+                    <TouchableOpacity style={css.btn} onPress={realizaLogin}>
                         <Text style={css.btnText}>ENTRAR</Text>
                     </TouchableOpacity>
                 </View>
@@ -55,14 +75,16 @@ export default function Login() {
                                 keyboardType='numeric'
                                 />
                             </View>
-                            <TextInput style={css.input} 
-                            placeholder='E-mail'
-                            keyboardType='default'
-                            />
-                            <TextInput style={css.input} 
-                            placeholder='Senha'
-                            keyboardType='default'
-                            />
+                            <View style={css.downinput}>
+                                <TextInput style={css.input} 
+                                placeholder='E-mail'
+                                keyboardType='default'
+                                />
+                                <TextInput style={css.input} 
+                                placeholder='Senha'
+                                keyboardType='default'
+                                />
+                            </View>
                         </View>
                         <Text style={css.helper} onPress={Trocar}>Já tem uma conta?</Text>
                         <TouchableOpacity style={css.btn}>
@@ -95,9 +117,11 @@ const css = StyleSheet.create({
         marginTop: 30,
         color: 'black', // Cor do texto
         height: 20,
-        fontSize: 18,
+        fontSize: 16,
         textAlign: "center",
-        textDecorationLine: "underline",
+        borderBottomColor: "black",
+        borderBottomWidth: 1,
+        width: 160,
         fontWeight: "bold"
     },
     logo: {
@@ -125,6 +149,12 @@ const css = StyleSheet.create({
         color: "blue"
     },
     highinput: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        gap: 10
+    },
+    downinput: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-evenly",
