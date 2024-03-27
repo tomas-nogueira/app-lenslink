@@ -14,7 +14,7 @@ export default function Home() {
             <View style={css.header}>
                 <View style={css.leftheader}>
                     <Image source={require("../assets/img/user.png")} />
-                    <Text style={css.ola}>Olá, <Text style={css.carla}></Text></Text>
+                    <Text style={css.ola}>Olá, <Text style={css.carla}>{usuario}</Text></Text>
                 </View>
                 <View style={css.rightheader}>
                     <Image source={require("../assets/img/logo.png")} style={css.logo} />

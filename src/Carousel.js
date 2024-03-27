@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Image, StyleSheet, Dimensions, FlatList } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
-const imageWidth = screenWidth * 0.8; // 80% da largura da tela
-const imageHeight = imageWidth * 0.75; // Proporção 4:3
+const imageWidth = screenWidth * 0.8; 
+const imageHeight = imageWidth * 0.75; 
 
 const image1 = require('../assets/img/image1.png');
 const image2 = require('../assets/img/image2.png');
@@ -66,15 +66,15 @@ const styles = StyleSheet.create({
   },
   slide: {
     width: screenWidth,
-    height: screenWidth * 0.75, // Proporção 4:3
-    justifyContent: 'center', // Centraliza verticalmente
-    alignItems: 'center', // Centraliza horizontalmente
+    height: screenWidth * 0.75, 
+    justifyContent: 'center', 
+    alignItems: 'center',
   },
   image: {
-    width: '80%', // 80% da largura do slide
-    height: '100%', // Altura igual ao slide
-    borderRadius: 10, // Arredonda as bordas
-    resizeMode: 'contain', // Exibir completamente a imagem, mesmo que ela fique menor
+    width: '80%',
+    height: '100%',
+    borderRadius: 10, 
+    resizeMode: 'contain', 
   },
 });
 

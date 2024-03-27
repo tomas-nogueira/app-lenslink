@@ -10,6 +10,7 @@ function UserProvider({children}) {
 
     async function Login( email, senha) {
         if(email == 'tomas@mail.com' && senha == '123') {
+            await AsyncStorage.setItem("usuario", "Tomas")
             setLogado(true);
         }
     }
