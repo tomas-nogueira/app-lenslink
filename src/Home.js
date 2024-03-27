@@ -45,6 +45,7 @@ const css = StyleSheet.create({
     undercontainer: {
         flex: 1,
         display: 'flex',
+        alignItems: 'center',
     },
     carla: {
         color: "#6B498E",
@@ -77,9 +78,13 @@ const css = StyleSheet.create({
         height: 50,
         borderRadius: 25,
         justifyContent: 'center',
+        bottom: 80
     },
     mood: {
         width: '95%',
         resizeMode: 'contain'
+    },
+    pessoa: {
+        height: 10
     }
 });

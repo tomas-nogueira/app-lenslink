@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Image, Alert, ScrollView } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Criar() {
@@ -78,7 +78,7 @@ export default function Criar() {
     }
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <View style={css.header}>
                 <View style={css.leftheader}>
                     <Image source={require("../assets/img/user.png")} style={css.user} />
@@ -88,32 +88,31 @@ export default function Criar() {
                 </View>
             </View>
             {evento ?
-                <View>
-                    <View style={css.eventobox}>
-                        <Image source={require('../assets/img/EVENTOS.png')} style={css.eventos} />
-                    </View>
-                    <TouchableOpacity onPress={TrocaEvento}>
-                        <Image source={require('../assets/img/CRIAR.png')} style={css.imgtext} />
-                    </TouchableOpacity>
-                    {eventosList.length > 0 && (
-                        <View style={css.eventosContainer}>
-                            {eventosList.map((evento, index) => (
-                                    <View style={css.eventoItem}>
-                                        <Text style={css.leftbox}><Text style={css.rightbox}>{evento.TipoEvento} {evento.NomeCliente}</Text></Text>
-                                        <Text style={css.leftbox}>Data: {evento.dataEvento}</Text>
-                                        <TouchableOpacity key={index} onPress={() => handleExcluirEvento(index)}>
-                                            <Image source={require('../assets/img/Remove.png')} style={css.trash}/>
-                                        </TouchableOpacity>
-                                    </View>
-                            ))}
+                <ScrollView>
+                    <View>
+                        <View style={css.eventobox}>
+                            <Image source={require('../assets/img/EVENTOS.png')} style={css.eventos} />
+                            <TouchableOpacity onPress={TrocaEvento} style={css.criarevento}>
+                                <Image source={require('../assets/img/CRIAR.png')} style={css.imgtext} />
+                            </TouchableOpacity>
                         </View>
-                    )}
-                </View>
+                        {eventosList.length > 0 && (
+                            <View style={css.eventosContainer}>
+                                {eventosList.map((evento, index) => (
+                                        <View style={css.eventoItem}>
+                                            <Text style={css.leftbox}><Text style={css.rightbox}>{evento.TipoEvento} {evento.NomeCliente}</Text></Text>
+                                            <Text style={css.leftbox}>Data: {evento.dataEvento}</Text>
+                                            <TouchableOpacity key={index} onPress={() => handleExcluirEvento(index)}>
+                                                <Image source={require('../assets/img/Remove.png')} style={css.trash}/>
+                                            </TouchableOpacity>
+                                        </View>
+                                ))}
+                            </View>
+                        )}
+                    </View>
+                </ScrollView>
                 :
                 <View style={css.container}>
-                    <TouchableOpacity onPress={TrocaEvento}>
-                        <Image source={require('../assets/img/arrow.png')} />
-                    </TouchableOpacity>
                     <Image source={require('../assets/img/evento.png')} />
                     <View>
                         <TextInput
@@ -141,6 +140,9 @@ export default function Criar() {
                     <TouchableOpacity style={css.btn} onPress={handleCriarEvento}>
                         <Image source={require('../assets/img/CRIAR.png')} style={css.imgtext} />
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={TrocaEvento} style={css.meuseventos}>
+                        <Image source={require('../assets/img/MEUSEVENTOS.png')}/>
+                    </TouchableOpacity>
                 </View>
             }
         </View>
@@ -152,7 +154,7 @@ const css = StyleSheet.create({
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 2,
+        marginTop: 25,
         gap: 20
     },
     evento: {
@@ -175,7 +177,8 @@ const css = StyleSheet.create({
         paddingVertical: 8
     },
     imgtext: {
-        marginTop: 8
+        marginTop: 8,
+        
     },
     header: {
         display: "flex",
@@ -202,17 +205,6 @@ const css = StyleSheet.create({
         marginTop: 20,
         paddingHorizontal: 20,
     },
-    eventoTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    eventoItem: {
-        marginBottom: 5,
-        padding: 10,
-        backgroundColor: '#6B498E',
-        borderRadius: 5
-    },
     btn: {
         marginTop: 35,
         backgroundColor: '#6B498E', 
@@ -223,16 +215,34 @@ const css = StyleSheet.create({
     imgtext: {
         marginTop: 8
     },
+    criarevento: {
+        marginTop: 10,
+        backgroundColor: '#6B498E',
+        padding: 5,
+        borderRadius: 5
+    },
+    eventoItem: {
+        marginBottom: 15,
+        padding: 10,
+        backgroundColor: '#6B498E',
+        borderRadius: 5
+    },
     leftbox: {
         fontSize: 25,
-        color: '#3C0350'
+        color: '#3C0350',
+        fontWeight: '700'
     },
     rightbox: {
         color: 'white',
     },
     trash: {
-        marginLeft: 277,
-        width: 50,
+        marginLeft: 283,
+        width: 45,
         resizeMode: 'contain'
+    },
+    meuseventos: {
+        backgroundColor: '#6B498E',
+        padding: 15,
+        borderRadius: 5
     }
-});
+})
