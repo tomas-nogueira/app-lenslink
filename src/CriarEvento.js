@@ -41,19 +41,21 @@ export default function Criar() {
     }
 
     function handleCriarEvento() {
-        const novoEvento = {
-            NomeCliente: NomeCliente,
-            TipoEvento: TipoEvento,
-            dataEvento: dataEvento
-        };
 
-        // Adiciona o novo evento à lista de eventos
-        setEventosList([...eventosList, novoEvento]);
+        if(NomeCliente && TipoEvento && dataEvento != '') {
 
-        // Limpa os campos de entrada após adicionar o evento
-        setNomeCliente('');
-        setTipoEvento('');
-        setDataEvento('');
+            const novoEvento = {
+                NomeCliente: NomeCliente,
+                TipoEvento: TipoEvento,
+                dataEvento: dataEvento
+            };
+
+            setEventosList([...eventosList, novoEvento]);
+
+            setNomeCliente('');
+            setTipoEvento('');
+            setDataEvento('');
+        }
     }
 
     function handleExcluirEvento(index) {
