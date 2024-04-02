@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, Image, Alert, ScrollView } from "react-native";
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Image, Alert, ScrollView, Keyboard, Platform} from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from "react-native-uuid";
+import * as Calendar from 'expo-calendar';
 
 export default function Criar() {
     const [evento, setEvento] = useState(true);
@@ -8,6 +10,19 @@ export default function Criar() {
     const [NomeCliente, setNomeCliente] = useState('');
     const [TipoEvento, setTipoEvento] = useState('');
     const [dataEvento, setDataEvento] = useState('');
+    const[dados, setDados] = useState([])
+
+    async function getPermission() {
+
+        const { status } = await Calendar.requestCalendarPermissionsAsync();
+        if(status === 'granted') {
+            const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+        }
+    }
+
+    useEffect(() => {
+        getPermission();
+    },[]);
 
     useEffect(() => {
         // Recupera os eventos salvos no AsyncStorage
@@ -40,7 +55,8 @@ export default function Criar() {
         setEvento(!evento);
     }
 
-    function handleCriarEvento() {
+    async function handleCriarEvento() {
+        Keyboard.dismiss();
 
         if(NomeCliente && TipoEvento && dataEvento != '') {
 
@@ -56,6 +72,51 @@ export default function Criar() {
             setTipoEvento('');
             setDataEvento('');
         }
+        if(TipoEvento != '' && dataEvento !== '') {
+            const evento = {
+                id: uuid.v4(),
+                nome: TipoEvento,
+                inicio: dataEvento
+            }
+
+            const novoEvento2 = [...dados, evento]
+            setDados(novoEvento2);
+
+            const defaultCalendarSource =
+            Platform.OS === 'ios'
+            ? await Calendar.getDefaultCalendarAsync()
+            : { isLocalAccount: true, name: 'Expo Calendar' };
+
+            const newCalendarID = await Calendar.createCalendarAsync({
+                title: 'Expo Calendar',
+                color: 'blue',
+                entityType: Calendar.EntityTypes.EVENT,
+                sourceId: defaultCalendarSource.id,
+                source: defaultCalendarSource,
+                name: 'internalCalendarName',
+                ownerAccount: 'personal',
+                accessLevel: Calendar.CalendarAccessLevel.OWNER,
+              });
+
+              let inicioDataHora = dataEvento.split(" ");
+              let inicioData = inicioDataHora[0].split("-");
+              let inicioHora = inicioDataHora[1].split(".")
+
+              const newEvent = {
+                title: TipoEvento,
+                startDate: new Date(inicioData[2], inicioData[1] -1, inicioData[0], inicioHora[0], inicioHora[1]),
+                endDate : new Date(inicioData[2], inicioData[1] -1, inicioData[0], inicioHora[0] + 1, inicioHora[1]),
+                location: 'a definir',
+                notes: 'Evento'
+              }
+
+              try {
+                await Calendar.createEventAsync(newCalendarID, newEvent)
+                alert('Evento criado com sucesso!')
+              } catch (error) {
+                alert('Erro ao criar evento!')
+              }
+        } 
     }
 
     function handleExcluirEvento(index) {
