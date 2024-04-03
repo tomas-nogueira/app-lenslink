@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, Image, StyleSheet, FlatList, TouchableOpacity, Button } from "react-native";
 import NetInfo from '@react-native-community/netinfo';
 
@@ -6,13 +6,24 @@ export default function Networking() {
   const DATA = [
     { id: "1", nome: "Carla", especialidade: 'Casamento', tel: '(14) 9919-9809', area: 'Bauru', image: require('../assets/img/perfilm.png')},
     { id: "2", nome: "Fátima", especialidade: 'Batizado', tel: '(11) 9229-9809', area: 'Jaú', image: require('../assets/img/pessoa2.png')},
-    { id: "3", nome: "Gabriela", especialidade: 'Gestante', tel: '(13) 9999-9809', area: 'Paraná', image: require('../assets/img/pessoa1.png')},
+    { id: "3", nome: "Gabriela", especialidade: 'Família', tel: '(13) 9999-9809', area: 'Paraná', image: require('../assets/img/pessoa1.png')},
     { id: "4", nome: "João", especialidade: 'Gestante', tel: '(11) 9909-9809', area: 'Curitiba', image: require('../assets/img/pessoa2.png')},
     { id: "5", nome: "Tomás", especialidade: 'Casamento', tel: '(13) 9459-9809', area: 'Ourinhos', image: require('../assets/img/pessoa1.png')},
     { id: "6", nome: "Valmir", especialidade: 'Batizado', tel: '(11) 8719-9809', area: 'Bauru', image: require('../assets/img/pessoa2.png')},
   ];
 
   const [selectedItem, setSelectedItem] = useState(null);
+  const [isConnected, setIsConnected] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsConnected(state.isConnected);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => setSelectedItem(item)}>
@@ -23,6 +34,7 @@ export default function Networking() {
               <Text style={css.text}>{item.nome}</Text>
               <Text style={css.esp}>{item.especialidade}</Text>
           </View>
+          <Image source={require('../assets/img/More.png')}/>
         </View>
       </View>
     </TouchableOpacity>
@@ -63,13 +75,19 @@ export default function Networking() {
         <Image source={require("../assets/img/conectese.png")} />
       </View>
 
-      <FlatList
-        style={css.flatlist}
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={() => <View style={{ height: 10 }} />} 
-      />
+      {isConnected ? (
+        <FlatList
+          style={css.flatlist}
+          data={DATA}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <View style={{ height: 10 }} />} 
+        />
+      ) : (
+        <View style={{ alignItems: 'center', marginTop: 20 }}>
+          <Text style={{ fontSize: 20, color: 'red' }}>Sem conexão com a internet!</Text>
+        </View>
+      )}
 
       {renderSelectedItem()}
     </View>
@@ -124,12 +142,14 @@ const css = StyleSheet.create({
   },
   esp: {
     fontSize: 20,
-    color: 'white'
+    color: 'white',
+    textAlign: 'center'
   },
   imgperfil: {
     width: 120,
     height: 110,
     resizeMode: 'contain',
+    marginTop: 5
   },
   selectedItemContainer: {
     position: 'absolute',
