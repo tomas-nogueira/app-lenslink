@@ -13,11 +13,11 @@ export default function Perfil() {
         <View style={css.boxinput}>
             <TextInput 
             style={css.input} 
-            placeholder='Insira o e-mail'
+            placeholder='Nome:'
             keyboardType='default'
             />
             <TextInput style={css.input} 
-            placeholder='Insira a senha'
+            placeholder='Área de atuação:'
             keyboardType='default'
             />
         </View>
@@ -53,7 +53,7 @@ const css = StyleSheet.create({
   },
   input: {
     marginTop: 30,
-    color: 'black', // Cor do texto
+    color: 'black',
     height: 45,
     fontSize: 16,
     textAlign: "left",

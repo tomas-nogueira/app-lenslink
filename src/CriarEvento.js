@@ -29,6 +29,7 @@ export default function Criar() {
         const fetchEventos = async () => {
             try {
                 const eventosSalvos = await AsyncStorage.getItem('eventosList');
+                console.log( eventosSalvos );
                 if (eventosSalvos !== null) {
                     setEventosList(JSON.parse(eventosSalvos));
                 }
@@ -61,6 +62,7 @@ export default function Criar() {
         if(NomeCliente && TipoEvento && dataEvento != '') {
 
             const novoEvento = {
+                id: uuid.v4(),
                 NomeCliente: NomeCliente,
                 TipoEvento: TipoEvento,
                 dataEvento: dataEvento
@@ -161,14 +163,14 @@ export default function Criar() {
                         </View>
                         {eventosList.length > 0 && (
                             <View style={css.eventosContainer}>
-                                {eventosList.map((evento, index) => (
-                                        <View style={css.eventoItem}>
-                                            <Text style={css.leftbox}><Text style={css.rightbox}>{evento.TipoEvento} {evento.NomeCliente}</Text></Text>
-                                            <Text style={css.leftbox}>Data: {evento.dataEvento}</Text>
-                                            <TouchableOpacity key={index} onPress={() => handleExcluirEvento(index)}>
-                                                <Image source={require('../assets/img/Remove.png')} style={css.trash}/>
-                                            </TouchableOpacity>
-                                        </View>
+                               {eventosList.map((evento) => (
+                                    <View style={css.eventoItem} key={evento.id}>
+                                        <Text style={css.leftbox}><Text style={css.rightbox}>{evento.TipoEvento} {evento.NomeCliente}</Text></Text>
+                                        <Text style={css.leftbox}>Data: {evento.dataEvento}</Text>
+                                        <TouchableOpacity onPress={() => handleExcluirEvento(evento.id)}>
+                                            <Image source={require('../assets/img/Remove.png')} style={css.trash}/>
+                                        </TouchableOpacity>
+                                    </View>
                                 ))}
                             </View>
                         )}
